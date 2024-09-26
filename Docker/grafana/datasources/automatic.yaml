@@ -1,0 +1,30 @@
+﻿apiVersion: 1
+
+deleteDatasources:
+  - name: gpd-pgsql
+    orgId: 1
+
+datasources:
+  - name: gpd-pgsql
+    orgId: 1
+    type: postgres
+    access: proxy
+    url: gpd-postgres:5432
+    user: admin
+    database: gdp
+    basicAuth: false
+    basicAuthUser:
+    basicAuthPassword:
+    withCredentials:
+    isDefault: true
+    secureJsonData:
+      password: yeaKtktsd123
+    jsonData:
+      connMaxLifetime: 14400
+      database: gdp
+      maxIdleConns: 100
+      maxIdleConnsAuto: true
+      maxOpenConns: 100
+      sslmode: disable
+    version: 1
+    editable: true

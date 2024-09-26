@@ -1,0 +1,74 @@
+name: gpd
+
+volumes:
+  gpd-postgres-data:
+  gpd-grafana-storage:
+
+networks:
+  gpd-network:
+    name: gpd-network
+    driver: bridge
+
+services:
+  gpd-postgres:
+    image: postgres
+    container_name: gpd-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: /data/postgres
+    volumes:
+       - gpd-postgres-data:/data/postgres
+       - gpd-postgres-data:/var/lib/postgresql/data
+       #- ./Dataset:/docker-entrypoint-initdb.d
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    restart: unless-stopped
+    networks:
+      - gpd-network
+  
+  gpd-grafana:
+    image: grafana/grafana
+    container_name: gpd-grafana
+    restart: unless-stopped
+    depends_on:
+      - gpd-postgres
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GF_DATABASE_TYPE=postgres
+      - GF_DATABASE_HOST=gpd-postgres:${POSTGRES_PORT}
+      - GF_DATABASE_NAME=${POSTGRES_DB}
+      - GF_DATABASE_USER=${POSTGRES_USER}
+      - GF_DATABASE_PASSWORD=${POSTGRES_PASSWORD}
+      - GF_DATABASE_SSL_MODE=disable
+    ports:
+      - '${GRAFANA_PORT}:${GRAFANA_PORT}'
+    volumes:
+      - gpd-grafana-storage:/var/lib/grafana
+      - ./grafana:/etc/grafana/provisioning
+    networks:
+      - gpd-network
+  
+#  gpd-server:
+#    image: emmuss/gpd
+#    user: "${PUID}:${PGID}"
+#    ports:
+#      - "${GPD_PORT}:${GPD_PORT}"
+#    container_name: gpd-server
+#    environment:
+#      - PUID=${PUID}
+#      - PGID=${PGID}
+#      - ASPNETCORE_ENVIRONMENT=Development
+#      - ASPNETCORE_URLS=${GPD_URLS}
+#      - Logging__LogLevel__Default=Error
+#      - Configuration__PgSqlConnectionString=Host=gpd-postgres:${POSTGRES_PORT};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB}
+#    volumes:
+#      - /:/host/root
+#      - ../wwwroot:/wwwroot
+#    restart: unless-stopped
+#    networks:
+#      - gpd-network

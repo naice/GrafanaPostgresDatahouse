@@ -1,0 +1,6 @@
+@GPD_HostAddress = http://localhost:5216
+
+GET {{GPD_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
