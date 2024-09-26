@@ -1,5 +1,5 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
+USER 1000
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
@@ -20,4 +20,5 @@ RUN dotnet publish "GPD.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAp
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+## RUN chown -R 1000:1000 ./wwwroot
 ENTRYPOINT ["dotnet", "GPD.dll"]
