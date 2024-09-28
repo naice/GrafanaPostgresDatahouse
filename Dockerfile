@@ -1,6 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim-amd64 AS build
 WORKDIR /
-# Copy everything
+# Copy everything..
 COPY ./GPD ./
 # Restore as distinct layers
 RUN dotnet restore
