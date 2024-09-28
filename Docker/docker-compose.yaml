@@ -67,6 +67,7 @@ services:
       - ASPNETCORE_URLS=${GPD_URLS}
       - Logging__LogLevel__Default=Error
       - Configuration__PgSqlConnectionString=Host=gpd-postgres:${POSTGRES_PORT};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB}
+      - Configuration__MaxTimeSeriesRetentionInYears=${GPD_MAX_TIMESERIES_RETENTION_IN_YEARS}
     volumes:
       - /:/host/root
       - ../wwwroot:/wwwroot
