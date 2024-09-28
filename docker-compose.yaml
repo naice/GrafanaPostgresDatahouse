@@ -54,8 +54,7 @@ services:
       - gpd-network
   
   gpd-server:
-    build: ../
-    #image: emmuss/gpd
+    image: emmuss/gpd
     user: "${PUID}:${PGID}"
     ports:
       - "${GPD_PORT}:${GPD_PORT}"
