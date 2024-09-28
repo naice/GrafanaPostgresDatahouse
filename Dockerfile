@@ -10,5 +10,4 @@ RUN dotnet publish /GPD/GPD.csproj -c Release -o app
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app .
-RUN chown -R 1000:1000 ./wwwroot
 ENTRYPOINT ["dotnet", "./GPD.dll"]
